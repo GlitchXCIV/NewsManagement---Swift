@@ -1,0 +1,125 @@
+import UIKit
+
+print ("📂 Sito Web -> Notizie 💻")
+
+class Autore {
+    var nominativo: String
+    var sitoWeb: String
+    
+    init(_ nominativo: String, _ sitoWeb: String) {
+        self.nominativo = nominativo
+        self.sitoWeb = sitoWeb
+    }
+    func toString() {
+        print("Autore: \(self.nominativo).\n Sito Web: \(self.sitoWeb)")
+    }
+}
+class Notizia {
+    var notizie: [Notizia] = []
+    var titolo: String
+    var testo: String
+    var dataPubblicazione: String
+    var autore: Autore
+    init(_ titolo: String, _ testo: String, _ dataPubblicazione: String, _ autore: Autore) {
+        self.titolo = titolo
+        self.testo = testo
+        self.dataPubblicazione = dataPubblicazione
+        self.autore = autore
+        
+    }
+    func toString() {
+        print("\(self.autore.nominativo) - \(self.autore.sitoWeb)\n \(self.titolo), \(self.dataPubblicazione) \n \(self.testo))")
+    }
+    
+}
+
+class NotiziaVideo: Notizia {
+    var urlVideo: String
+    var durataVideo: String
+    init(_ titolo: String, _ testo: String, _ dataPubblicazione: String, _ autore: Autore, _ urlVideo: String, _ durataVideo: String) {
+        self.urlVideo = urlVideo
+        self.durataVideo = durataVideo
+        super.init(titolo, testo, dataPubblicazione, autore)
+        
+    }
+    override func toString() {
+        super.toString()
+        print("\(self.urlVideo) - \(self.durataVideo)")
+    }
+}
+class GestioneNotizie {
+    var notizie: [Notizia] = [];
+    
+    func nuovaNotizia(_ notizia: Notizia) {
+        notizie.append(notizia)
+    }
+    func listaNotizie() {
+        for item in notizie {
+            if let itemNotiziaVideo = item as? NotiziaVideo {
+                print("\(itemNotiziaVideo.toString())\n")
+            }
+            else {
+                print("\(item.toString())\n")
+            }
+        }
+    }
+    func ricercaArticoliPerAutori(autoreRicerca: Autore) {
+        print("Ricerca autore: \(autoreRicerca.nominativo)")
+        for item in notizie {
+            if item.autore.nominativo == autoreRicerca.nominativo {
+                if let videoN = item as? NotiziaVideo {
+                    print("\(videoN.toString())")
+                }
+                else {
+                    print("\(item.toString())")
+                }
+            }
+        }
+    }
+    func contaArticoli() {
+        var contaArticoli: Int = 0
+        var contaVideo: Int = 0
+        for item in notizie {
+            if item is NotiziaVideo {
+                contaVideo += 1
+            } else {
+                contaArticoli += 1
+            }
+        }
+        let somma = contaArticoli + contaVideo
+        print("Numeri notizie: \(somma) di cui \(contaArticoli) articoli e \(contaArticoli) articoli con video.")
+    }
+    func ultimoArticolo() {
+        let ultimoArt = notizie.last
+        if ultimoArt is NotiziaVideo {
+            print("\(String(describing: ultimoArt?.toString()))")
+        }
+        if ultimoArt != nil {
+            print("\(String(describing: ultimoArt?.toString()))")
+        }
+    }
+}
+
+//istanziare gli autori
+print("🟡 Autori")
+var giusy = Autore("Giusy Giangravè", "giusygiangravenotizie.it")
+giusy.toString()
+var pinko = Autore("Pink Panko", "pinkopankonotizie.it")
+pinko.toString()
+//istanziare l'array delle notizie
+var news = GestioneNotizie()
+//istanziare le notizie
+var notizia1 = Notizia("Coronavirus in Sicilia", "I casi positivi ammontano a 1774.", "06-04-2020", giusy)
+var notizia2 = NotiziaVideo("Coronavirus in Lombardia", "I casi positivi ammontano a 50455.", "06-04-2020", pinko, "videonews.it/bcanbqwoihcnbicyyy", "05.35")
+var notizia3 = Notizia("Coronavirus in Lazio", "I casi positivi ammontano a 3753.", "06-04-2020", giusy)
+news.nuovaNotizia(notizia1)
+news.nuovaNotizia(notizia2)
+news.nuovaNotizia(notizia3)
+print("\n🟡 Lista delle notizie")
+news.listaNotizie()
+print("\n🟡 Ricerca articoli per autore")
+news.ricercaArticoliPerAutori(autoreRicerca: giusy)
+print("\n🟡 Conta articoli")
+news.contaArticoli()
+print("\n🟡 Stampa ultimo articolo")
+news.ultimoArticolo()
